@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BookBuddy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>BookBuddy</h1>
+  <form id="bookForm">
+    <input type="text" placeholder="Title" id="title" required />
+    <input type="text" placeholder="Author" id="author" required />
+    <select id="status">
+      <option value="to-read">To Read</option>
+      <option value="reading">Reading</option>
+      <option value="finished">Finished</option>
+    </select>
+    <button type="submit">Add Book</button>
+  </form>
+
+  <div id="bookList"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
