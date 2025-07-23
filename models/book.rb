@@ -1,14 +1,14 @@
 require 'securerandom'
 
 class Book
-  # I don't know what attr_accessor is yet... 🤔
-  attr_accessor :id, :title, :author, :status
+  attr_accessor :id, :title, :author, :status, :notes
 
-  def initialize(title:, author:, status: 'to-read', id: nil)
+  def initialize(id: nil, title:, author:, status: 'unread', notes: "")
     @id = id || SecureRandom.uuid
     @title = title
     @author = author
     @status = status
+    @notes = notes
   end
 
   def to_h
@@ -16,7 +16,8 @@ class Book
       id: id,
       title: title,
       author: author,
-      status: status
+      status: status,
+      notes: notes
     }
   end
 end
