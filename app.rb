@@ -8,7 +8,7 @@ set :port, 4567
 repo = BookRepository.new('./data/books.yml')
 
 get '/' do
-  'Welcome to BookBuddy API'
+  send_file File.join(settings.public_folder, 'index.html')
 end
 
 get '/api/books' do
