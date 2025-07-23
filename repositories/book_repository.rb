@@ -1,11 +1,10 @@
 require 'yaml'
-require_relative 'book'
+require_relative '../models/book'
 
 class BookRepository
-  FILE_PATH = './data/books.yml'
 
-
-  def initialize
+  def initialize(file_path)
+    @file_path = file_path
     @books = load_books
   end
 
