@@ -5,11 +5,10 @@ require_relative './models/book'
 require_relative './repositories/book_repository'
 
 set :port, 4567
-repo = BookRepository.new('./data/books.yml')
+set :static, true
+set :public_folder, File.dirname(__FILE__) + '/public'
 
-get '/' do
-  send_file File.join(settings.public_folder, 'index.html')
-end
+repo = BookRepository.new('./data/books.yml')
 
 get '/api/books' do
   books = repo.all
