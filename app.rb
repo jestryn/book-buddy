@@ -2,7 +2,7 @@ require 'sinatra'
 require 'sinatra/json'
 require 'json'
 require_relative './models/book'
-require_relative './models/book_repository'
+require_relative './repositories/book_repository'
 
 set :port, 4567
 repo = BookRepository.new('./data/books.yml')
