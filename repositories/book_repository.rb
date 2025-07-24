@@ -5,32 +5,39 @@ class BookRepository
 
   def initialize(file_path)
     @file_path = file_path
-    @books = load_books
   end
 
   def all
-    @books
+    load_books
   end
 
   def find(id)
-    @books.find { |b| b.id == id }
+    load_books.find { |b| b.id == id }
   end
 
   def add(book)
-    @books << book
-    save_books
+    books = load_books
+    books << book
+    save_books(books)
   end
 
   def update(id, attrs)
-    book = find(id)
+    books = load_books
+    book = books.find { |b| b.id == id }
     return unless book
+
     attrs.each { |k, v| book.send("#{k}=", v) if book.respond_to?("#{k}=") }
-    save_books
+    save_books(books)
+    book
   end
 
   def delete(id)
-    @books.reject! { |b| b.id == id }
-    save_books
+    books = load_books
+    original_size = books.size
+    books.reject! { |b| b.id == id }
+    changed = books.size != original_size
+    save_books(books) if changed
+    changed
   end
 
   private
