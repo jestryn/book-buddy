@@ -1,0 +1,19 @@
+- id: "1"
+  title: "Extreme Ownership "
+  author: "Jocko Willink"
+  status: "completed"
+
+- id: "2"
+  title: "Becoming Supernatural"
+  author: "Dr. Joe Dispenza"
+  status: "reading"
+
+- id: "3"
+  title: "Pillars of the Earth"
+  author: "Ken Follet"
+  status: "reading"
+
+- id: "4"
+  title: "Discipline Equals Freedom"
+  author: "Jocko Willink"
+  status: "unread"
