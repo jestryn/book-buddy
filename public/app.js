@@ -63,13 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
       badge.className = `badge ${badgeColor(book.status)}`
       badge.textContent = capitalize(book.status)
 
-      body.append(title, author, badge)
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-sm btn-outline-danger float-end';
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.addEventListener('click', () => deleteBook(book.id));
+
+      // body.append(title, author, badge)
+      body.appendChild(title);
+      body.appendChild(author);
+      body.appendChild(badge);
+      body.appendChild(deleteBtn);
       card.appendChild(body)
       col.appendChild(card)
       row.appendChild(col)
     })
 
     bookList.appendChild(row)
+  }
+
+  async function deleteBook(id) {
+    await fetch(`/api/books/${id}`, {
+      method: 'DELETE',
+    });
+    loadBooks();
   }
 
   function statusColor(status) {
