@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('bookForm')
-  const filter = document.getElementById('filterStatus')
-  const list = document.getElementById('bookList')
+  const bookForm = document.getElementById('bookForm')
+  const bookList = document.getElementById('bookList')
+  const filterStatus = document.getElementById('filterStatus')
 
-  form.addEventListener('submit', async (e) => {
+  bookForm.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const formData = new FormData(form)
+    const formData = new FormData(bookForm)
     const book = {
       title: formData.get('title'),
       author: formData.get('author'),
@@ -18,23 +18,23 @@ document.addEventListener('DOMContentLoaded', () => {
       body: JSON.stringify(book)
     })
 
-    form.reset()
+    bookForm.reset()
     await loadBooks()
   })
 
-  filter.addEventListener('change', () => loadBooks(filter.value))
+  filterStatus.addEventListener('change', () => loadBooks(filterStatus.value))
 
   async function loadBooks(statusFilter = 'all') {
     const res = await fetch('/api/books')
     const books = await res.json()
-    list.innerHTML = ''
+    bookList.innerHTML = ''
 
     const filtered = statusFilter === 'all'
       ? books
       : books.filter(b => b.status === statusFilter)
 
     if (filtered.length === 0) {
-      list.innerHTML = '<p class="text-muted">No books to show.</p>'
+      bookList.innerHTML = '<p class="text-muted">No books to show.</p>'
       return
     }
 
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       row.appendChild(col)
     })
 
-    list.appendChild(row)
+    bookList.appendChild(row)
   }
 
   function statusColor(status) {
