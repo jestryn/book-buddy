@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const books = await res.json()
     bookList.innerHTML = ''
 
-    const filtered = statusFilter === 'all'
+    const filteredBooks = statusFilter === 'all'
       ? books
       : books.filter(b => b.status === statusFilter)
 
-    if (filtered.length === 0) {
+    if (filteredBooks.length === 0) {
       bookList.innerHTML = '<p class="text-muted">No books to show.</p>'
       return
     }
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const row = document.createElement('div')
     row.className = 'row row-cols-1 row-cols-md-2 g-3'
 
-    filtered.forEach(book => {
+    filteredBooks.forEach(book => {
       const col = document.createElement('div')
       col.className = 'col'
 
