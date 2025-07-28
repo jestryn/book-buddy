@@ -127,7 +127,7 @@ async function searchGoogleBooks(query) {
   try {
     const res = await fetch(url)
     const data = await res.json()
-    console.log('Google Books results:', data.items)
+    console.debug('Google Books results:', data.items)
   } catch (err) {
     console.error('Error fetching from Google Books:', err)
   }
