@@ -1,3 +1,5 @@
+import './bs-color-mode.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const bookForm = document.getElementById('bookForm')
   const bookList = document.getElementById('bookList')
@@ -112,4 +114,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   loadBooks()
+
+  searchGoogleBooks('Clean Code')  // Just to test!
+
 })
+
+
+// test load
+
+async function searchGoogleBooks(query) {
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
+  try {
+    const res = await fetch(url)
+    const data = await res.json()
+    console.log('Google Books results:', data.items)
+  } catch (err) {
+    console.error('Error fetching from Google Books:', err)
+  }
+}

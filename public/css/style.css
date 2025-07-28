@@ -1,0 +1,7 @@
+nav.navbar {
+  background-color: var(--bs-body-bg); /* Default Bootstrap light background */
+}
+
+nav.navbar[data-bs-theme="dark"] {
+  background-color: var(--bs-body-bg-dark); /* Bootstrap dark background */
+}
