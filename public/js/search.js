@@ -10,30 +10,30 @@ searchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault()
     const query = searchInput.value.trim()
-    if (query) searchBooks(query)
+    if (query) searchLibrary(query)
   }
 })
 
 searchButton.addEventListener('click', () => {
   const query = searchInput.value.trim()
-  if (query) searchBooks(query)
+  if (query) searchLibrary(query)
 })
 
-async function searchBooks(query) {
+async function searchLibrary(query) {
   console.debug(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`)
   const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`)
   const data = await res.json()
   displaySearchResults(data.items || [])
 }
 
-function displaySearchResults(books) {
+function displaySearchResults(library) {
   searchResults.innerHTML = ''
-  if (books.length === 0) {
+  if (library.length === 0) {
     searchResults.innerHTML = '<p class="text-muted">No results found.</p>'
     return
   }
 
-  books.forEach(book => {
+  library.forEach(book => {
     const info = book.volumeInfo
     const id = book.id
     const title = info.title || 'No title'

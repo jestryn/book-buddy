@@ -14,28 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
       status: formData.get('status')
     }
 
-    await fetch('/api/books', {
+    await fetch('/api/library', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(book)
     })
 
     bookForm.reset()
-    await loadBooks()
+    await loadLibrary()
   })
 
-  filterStatus.addEventListener('change', () => loadBooks(filterStatus.value))
+  filterStatus.addEventListener('change', () => loadLibrary(filterStatus.value))
 
-  async function loadBooks(statusFilter = 'all') {
-    const res = await fetch('/api/books')
-    const books = await res.json()
+  async function loadLibrary(statusFilter = 'all') {
+    const res = await fetch('/api/library')
+    const library = await res.json()
     bookList.innerHTML = ''
 
-    const filteredBooks = statusFilter === 'all'
-      ? books
-      : books.filter(b => b.status === statusFilter)
+    const filteredLibrary = statusFilter === 'all'
+      ? library
+      : library.filter(b => b.status === statusFilter)
 
-    if (filteredBooks.length === 0) {
+    if (filteredLibrary.length === 0) {
       bookList.innerHTML = '<p class="text-muted">No books to show.</p>'
       return
     }
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const row = document.createElement('div')
     row.className = 'row row-cols-1 row-cols-md-2 g-3'
 
-    filteredBooks.forEach(book => {
+    filteredLibrary.forEach(book => {
       const col = document.createElement('div')
       col.className = 'col'
 
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       deleteBtn.textContent = 'Delete'
       deleteBtn.addEventListener('click', async () => {
         await deleteBook(book.id)
-        await loadBooks(statusFilter)
+        await loadLibrary(statusFilter)
       })
 
       body.appendChild(title)
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function deleteBook(id) {
-    await fetch(`/api/books/${id}`, {
+    await fetch(`/api/library/${id}`, {
       method: 'DELETE'
     })
   }
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
 
-  loadBooks()
+  loadLibrary()
 
   searchGoogleBooks('Clean Code')  // Just to test!
 
