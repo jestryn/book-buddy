@@ -14,6 +14,10 @@ get '/' do
   send_file File.join(settings.public_folder, 'index.html')
 end
 
+get '/search' do
+  send_file File.join(settings.public_folder, 'search.html')
+end
+
 get '/api/books' do
   books = repo.all
   json books.map(&:to_h)
