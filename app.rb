@@ -26,7 +26,7 @@ end
 post '/api/library' do
   payload = JSON.parse(request.body.read)
   new_id = Time.now.to_i.to_s
-  book = Book.new(id: new_id, title: payload['title'], author: payload['author'], status: payload['status'])
+  book = LibraryEntry.new(id: new_id, title: payload['title'], author: payload['author'], status: payload['status'])
   repo.add(book)
   status 201
   json book.to_h
