@@ -13,3 +13,13 @@ nav.navbar[data-bs-theme="dark"] {
   align-items: center;
   justify-content: center;
 }
+
+.dropdown-toggle-no-style {
+  padding: 3px;
+  line-height: 1;
+  display: inline-block;
+  color: inherit;
+  background: none;
+  border: none;
+  text-decoration: none;
+}

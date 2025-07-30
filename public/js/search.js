@@ -46,6 +46,40 @@ function displaySearchResults(library) {
     const card = document.createElement('div')
     card.className = 'card h-100 border-0 shadow-sm'
 
+    // Dropdown menu in top-right corner
+    card.classList.add('position-relative')
+
+    const dropdown = document.createElement('div')
+    dropdown.className = 'dropdown position-absolute end-0'
+
+    // Create the clickable icon
+    const toggleBtn = document.createElement('button')
+    toggleBtn.className = 'btn dropdown-toggle-no-style'
+    toggleBtn.setAttribute('data-bs-toggle', 'dropdown')
+    toggleBtn.setAttribute('aria-expanded', 'false')
+
+    // Add icon inside the toggle
+    const icon = document.createElement('i')
+    icon.className = 'bi bi-plus fs-3'
+    toggleBtn.appendChild(icon)
+
+    const dropdownMenu = document.createElement('ul')
+    dropdownMenu.className = 'dropdown-menu dropdown-menu-end'
+
+    const addItem = document.createElement('li')
+    const addBtn = document.createElement('button')
+    addBtn.className = 'dropdown-item'
+    addBtn.textContent = 'Add to Library'
+    addBtn.addEventListener('click', () => {
+      saveToLibrary({ id, title, authors, thumbnail })
+    })
+    addItem.appendChild(addBtn)
+    dropdownMenu.appendChild(addItem)
+
+    dropdown.appendChild(toggleBtn)
+    dropdown.appendChild(dropdownMenu)
+    card.appendChild(dropdown)
+
     const row = document.createElement('div')
     row.className = 'row g-0'
 
@@ -71,7 +105,7 @@ function displaySearchResults(library) {
     body.className = 'card-body py-2 px-3 d-flex flex-column justify-content-center'
 
     const titleEl = document.createElement('h6')
-    titleEl.className = 'card-title fw-bold mb-1'
+    titleEl.className = 'card-title fw-bold mb-1 pe-3'
     titleEl.textContent = title
 
     const authorEl = document.createElement('p')
