@@ -97,8 +97,6 @@ function displaySearchResults(books) {
   })
 }
 
-
-
 function saveToLibrary(book) {
   // Placeholder – we’ll implement this part later!
   console.log('Saving to library:', book)
