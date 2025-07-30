@@ -52,12 +52,17 @@ function displaySearchResults(books) {
     const imgCol = document.createElement('div')
     imgCol.className = 'col-4'
 
+    const imgWrapper = document.createElement('div')
+    imgWrapper.className = 'book-img-wrapper'
+
     const img = document.createElement('img')
     img.src = thumbnail
-    img.className = 'img-fluid rounded-start h-100 object-fit-cover'
     img.alt = title
+    img.className = 'img-fluid rounded-start object-fit-cover h-100 w-100'
 
-    imgCol.appendChild(img)
+    imgWrapper.appendChild(img)
+    imgCol.appendChild(imgWrapper)
+
 
     const bodyCol = document.createElement('div')
     bodyCol.className = 'col-8'

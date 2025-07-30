@@ -5,3 +5,11 @@ nav.navbar {
 nav.navbar[data-bs-theme="dark"] {
   background-color: var(--bs-body-bg-dark); /* Bootstrap dark background */
 }
+
+.book-img-wrapper {
+  height: 150px; /* or whatever fixed height you want */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
