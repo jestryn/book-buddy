@@ -38,7 +38,7 @@ function displaySearchResults(books) {
     const id = book.id
     const title = info.title || 'No title'
     const authors = info.authors ? info.authors.join(', ') : 'Unknown'
-    const thumbnail = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://via.placeholder.com/128x193?text=No+Cover'
+    const thumbnail = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://placehold.co/128x193?text=No+Cover'
 
     const col = document.createElement('div')
     col.className = 'col'
