@@ -1,6 +1,6 @@
 require 'securerandom'
 
-class Book
+class LibraryEntry
   attr_accessor :id, :title, :author, :status, :notes
 
   def initialize(id: nil, title:, author:, status: 'unread', notes: "")
