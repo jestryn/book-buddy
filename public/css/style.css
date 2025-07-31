@@ -15,7 +15,8 @@ nav.navbar[data-bs-theme="dark"] {
 }
 
 .dropdown-toggle-no-style {
-  padding: 3px;
+  margin-top: -13px;
+  padding: 0 9px 0 0;
   line-height: 1;
   display: inline-block;
   color: inherit;

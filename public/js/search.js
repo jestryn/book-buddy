@@ -44,7 +44,7 @@ function displaySearchResults(library) {
     col.className = 'col'
 
     const card = document.createElement('div')
-    card.className = 'card h-100 border-0 shadow-sm'
+    card.className = 'card h-100 border-0 shadow-sm p-3'
 
     // Dropdown menu in top-right corner
     card.classList.add('position-relative')
@@ -73,9 +73,9 @@ function displaySearchResults(library) {
     addBtn.addEventListener('click', () => {
       saveToLibrary({ id, title, authors, thumbnail })
     })
+
     addItem.appendChild(addBtn)
     dropdownMenu.appendChild(addItem)
-
     dropdown.appendChild(toggleBtn)
     dropdown.appendChild(dropdownMenu)
     card.appendChild(dropdown)
@@ -84,7 +84,7 @@ function displaySearchResults(library) {
     row.className = 'row g-0'
 
     const imgCol = document.createElement('div')
-    imgCol.className = 'col-4'
+    imgCol.className = 'col-3 col-md-4'
 
     const imgWrapper = document.createElement('div')
     imgWrapper.className = 'book-img-wrapper'
@@ -92,14 +92,13 @@ function displaySearchResults(library) {
     const img = document.createElement('img')
     img.src = thumbnail
     img.alt = title
-    img.className = 'img-fluid rounded-start object-fit-cover h-100 w-100'
+    img.className = 'img-fluid rounded-start rounded-end object-fit-cover h-100 w-100'
 
     imgWrapper.appendChild(img)
     imgCol.appendChild(imgWrapper)
 
-
     const bodyCol = document.createElement('div')
-    bodyCol.className = 'col-8'
+    bodyCol.className = 'col-9 col-md-8'
 
     const body = document.createElement('div')
     body.className = 'card-body py-2 px-3 d-flex flex-column justify-content-center'
