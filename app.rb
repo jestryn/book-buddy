@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/json'
 require 'json'
+require 'securerandom'
 require_relative './models/library_entry'
 require_relative './repositories/library_repository'
 
@@ -24,9 +25,23 @@ get '/api/library' do
 end
 
 post '/api/library' do
+  request.body.rewind
   payload = JSON.parse(request.body.read)
-  new_id = Time.now.to_i.to_s
-  book = LibraryEntry.new(id: new_id, title: payload['title'], author: payload['author'], status: payload['status'])
+
+  required_keys = %w[id title authors thumbnail] # id here is the Google Books volume ID
+  halt 400, { error: 'Missing required fields' }.to_json unless required_keys.all? { |k| payload[k] && !payload[k].empty? }
+
+  new_id = SecureRandom.uuid
+  book = LibraryEntry.new(
+    id: new_id,
+    google_id: payload['id'],            # Google Books volume ID
+    title: payload['title'],
+    authors: payload['authors'],
+    thumbnail: payload['thumbnail'],
+    status: 'unread',
+    added_date: Time.now.strftime('%Y-%m-%d')
+  )
+
   repo.add(book)
   status 201
   json book.to_h

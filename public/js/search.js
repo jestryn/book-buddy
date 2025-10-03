@@ -34,12 +34,6 @@ function displaySearchResults(library) {
   }
 
   library.forEach(book => {
-    const info = book.volumeInfo
-    const id = book.id
-    const title = info.title || 'No title'
-    const authors = info.authors ? info.authors.join(', ') : 'Unknown'
-    const thumbnail = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://placehold.co/128x193?text=No+Cover'
-
     const col = document.createElement('div')
     col.className = 'col'
 
@@ -70,6 +64,12 @@ function displaySearchResults(library) {
     const addBtn = document.createElement('button')
     addBtn.className = 'dropdown-item'
     addBtn.textContent = 'Add to Library'
+
+    const info = book.volumeInfo
+    const id = book.id
+    const title = info.title || 'No title'
+    const authors = info.authors ? info.authors.join(', ') : 'Unknown'
+    const thumbnail = info.imageLinks?.thumbnail?.replace('http:', 'https:') || 'https://placehold.co/128x193?text=No+Cover'
     addBtn.addEventListener('click', () => {
       saveToLibrary({ id, title, authors, thumbnail })
     })
@@ -130,7 +130,25 @@ function displaySearchResults(library) {
   })
 }
 
-function saveToLibrary(book) {
-  // Placeholder – we’ll implement this part later!
-  console.log('Saving to library:', book)
+async function saveToLibrary(book) {
+  // book should have: { id, title, authors, thumbnail }
+  try {
+    const res = await fetch('/api/library', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(book)
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      console.error('Failed to save:', err.error || res.statusText)
+      alert('Could not add to library')
+      return
+    }
+    const saved = await res.json()
+    console.log('Saved to library:', saved)
+    // TODO: optionally disable the menu item or show “Added”
+  } catch (e) {
+    console.error('Network error:', e)
+    alert('Network error while saving')
+  }
 }

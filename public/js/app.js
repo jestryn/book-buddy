@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formData = new FormData(bookForm)
     const book = {
       title: formData.get('title'),
-      author: formData.get('author'),
+      authors: formData.get('authors'),
       status: formData.get('status')
     }
 
@@ -57,9 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
       title.className = 'card-title'
       title.textContent = book.title
 
-      const author = document.createElement('p')
-      author.className = 'card-text mb-1'
-      author.innerHTML = `<strong>Author:</strong> ${book.author}`
+      const authors = document.createElement('p')
+      authors.className = 'card-text mb-1'
+      authors.innerHTML = `<strong>Author:</strong> ${book.authors}`
 
       const badge = document.createElement('span')
       badge.className = `badge ${badgeColor(book.status)}`
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
 
       body.appendChild(title)
-      body.appendChild(author)
+      body.appendChild(authors)
       body.appendChild(badge)
       body.appendChild(deleteBtn)
       card.appendChild(body)
