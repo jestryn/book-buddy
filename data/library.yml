@@ -1,19 +1,41 @@
-- id: "1"
-  title: "Extreme Ownership "
-  author: "Jocko Willink"
-  status: "completed"
-
-- id: "2"
-  title: "Becoming Supernatural"
-  author: "Dr. Joe Dispenza"
-  status: "reading"
-
-- id: "3"
-  title: "Pillars of the Earth"
-  author: "Ken Follet"
-  status: "reading"
-
-- id: "4"
-  title: "Discipline Equals Freedom"
-  author: "Jocko Willink"
-  status: "unread"
+---
+- :id: '1'
+  :google_id: 
+  :title: 'Extreme Ownership '
+  :authors: Jocko Willink
+  :thumbnail: 
+  :status: completed
+  :notes: ''
+  :added_date: 
+- :id: '2'
+  :google_id: 
+  :title: Becoming Supernatural
+  :authors: Dr. Joe Dispenza
+  :thumbnail: 
+  :status: reading
+  :notes: ''
+  :added_date: 
+- :id: '3'
+  :google_id: 
+  :title: Pillars of the Earth
+  :authors: Ken Follet
+  :thumbnail: 
+  :status: reading
+  :notes: ''
+  :added_date: 
+- :id: '4'
+  :google_id: 
+  :title: Discipline Equals Freedom
+  :authors: Jocko Willink
+  :thumbnail: 
+  :status: unread
+  :notes: ''
+  :added_date: 
+- :id: 72fbaa4e-5f89-41ce-b384-6cd6970402ed
+  :google_id: QYYQDAAAQBAJ
+  :title: The Pillars of the Earth
+  :authors: Ken Follett
+  :thumbnail: https://books.google.com/books/content?id=QYYQDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-01'
