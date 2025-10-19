@@ -1,41 +1,65 @@
 ---
-- :id: '1'
-  :google_id: 
-  :title: 'Extreme Ownership '
-  :authors: Jocko Willink
-  :thumbnail: 
-  :status: completed
-  :notes: ''
-  :added_date: 
-- :id: '2'
-  :google_id: 
-  :title: Becoming Supernatural
-  :authors: Dr. Joe Dispenza
-  :thumbnail: 
-  :status: reading
-  :notes: ''
-  :added_date: 
-- :id: '3'
-  :google_id: 
-  :title: Pillars of the Earth
-  :authors: Ken Follet
-  :thumbnail: 
-  :status: reading
-  :notes: ''
-  :added_date: 
-- :id: '4'
-  :google_id: 
-  :title: Discipline Equals Freedom
-  :authors: Jocko Willink
-  :thumbnail: 
+- :id: e1180be3-51d3-4ce1-b8de-8ab931d0160f
+  :google_id: ywaJCgAAQBAJ
+  :title: Extreme Ownership
+  :authors: Jocko Willink, Leif Babin
+  :thumbnail: https://books.google.com/books/content?id=ywaJCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
   :status: unread
   :notes: ''
-  :added_date: 
-- :id: 72fbaa4e-5f89-41ce-b384-6cd6970402ed
+  :added_date: '2025-10-19'
+- :id: e99645c7-79ff-41cd-8aef-0f2220db9209
+  :google_id: 5WH6DwAAQBAJ
+  :title: Becoming Supernatural
+  :authors: Dr. Joe Dispenza
+  :thumbnail: https://books.google.com/books/content?id=5WH6DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-19'
+- :id: 46b76161-d879-480f-a9c9-5afa9b0a5ae1
+  :google_id: A4bwDwAAQBAJ
+  :title: Discipline Equals Freedom
+  :authors: Jocko Willink
+  :thumbnail: https://books.google.com/books/content?id=A4bwDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-19'
+- :id: e432738c-582b-4352-905a-2698496edb60
   :google_id: QYYQDAAAQBAJ
   :title: The Pillars of the Earth
   :authors: Ken Follett
   :thumbnail: https://books.google.com/books/content?id=QYYQDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
   :status: unread
   :notes: ''
-  :added_date: '2025-10-01'
+  :added_date: '2025-10-19'
+- :id: 10788990-4140-4bcc-9b31-6f7b1b72b303
+  :google_id: x6Wm4l9Y1NkC
+  :title: Gate of Ivrel
+  :authors: C. J. Cherryh
+  :thumbnail: https://books.google.com/books/content?id=x6Wm4l9Y1NkC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-19'
+- :id: 9c142615-3f4a-4e9d-8040-f8fbae12ee94
+  :google_id: 2X-WUfLBRxEC
+  :title: Well of Shiuan
+  :authors: C. J. Cherryh
+  :thumbnail: https://books.google.com/books/content?id=2X-WUfLBRxEC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-19'
+- :id: 576e3c32-ab5a-45df-945a-2afa34861999
+  :google_id: JZ-nOAdIAKYC
+  :title: Fires of Azeroth
+  :authors: C. J. Cherryh
+  :thumbnail: https://books.google.com/books/content?id=JZ-nOAdIAKYC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-19'
+- :id: 025fccaa-2315-438f-b82b-44881af2902d
+  :google_id: VFuJEAAAQBAJ
+  :title: Exile's Gate
+  :authors: C. J. Cherryh
+  :thumbnail: https://books.google.com/books/content?id=VFuJEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+  :status: unread
+  :notes: ''
+  :added_date: '2025-10-19'
