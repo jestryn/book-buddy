@@ -59,3 +59,8 @@ delete '/api/library/:id' do
   halt 404, json({ error: 'Book not found' }) unless success
   status 204
 end
+
+get '/api/library/google_ids' do
+  content_type :json
+  json repo.all.map(&:google_id)
+end
