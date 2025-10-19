@@ -152,3 +152,32 @@ async function saveToLibrary(book) {
     alert('Network error while saving')
   }
 }
+
+let savedGoogleIds = new Set()
+
+async function preloadSavedIds() {
+  try {
+    const res = await fetch('/api/library/google_ids')
+    const ids = await res.json()
+    savedGoogleIds = new Set(ids)
+  } catch (e) { console.warn('Could not load saved IDs', e) }
+}
+
+// call once at load
+preloadSavedIds()
+
+// when building each card:
+const alreadySaved = savedGoogleIds.has(id)
+// …
+addBtn.classList.toggle('disabled', alreadySaved)
+addBtn.textContent = alreadySaved ? 'Already in Library' : 'Add to Library'
+addBtn.disabled = alreadySaved
+
+addBtn.addEventListener('click', async () => {
+  if (alreadySaved) return
+  await saveToLibrary({ id, title, authors, thumbnail })
+  savedGoogleIds.add(id)
+  addBtn.textContent = 'Added'
+  addBtn.disabled = true
+  addBtn.classList.add('disabled')
+})
