@@ -115,20 +115,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadLibrary()
 
-  searchGoogleBooks('Clean Code')  // Just to test!
-
 })
-
-
-// test load
-
-async function searchGoogleBooks(query) {
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
-  try {
-    const res = await fetch(url)
-    const data = await res.json()
-    console.debug('Google Books results:', data.items)
-  } catch (err) {
-    console.error('Error fetching from Google Books:', err)
-  }
-}
