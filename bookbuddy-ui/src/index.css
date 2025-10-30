@@ -1,68 +1,35 @@
+@import "tailwindcss";
+
+/* Use the html.dark class to activate dark variants */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 1) Define semantic tokens once. These create utilities like
+   text-text, bg-surface, border-border, bg-accent-600, etc. */
+@theme {
+    --color-surface: oklch(0.98 0.01 255);          /* page bg (light) */
+    --color-text:    oklch(0.20 0.02 255);          /* primary text (light) */
+    --color-muted:   oklch(0.55 0.02 255);          /* secondary text (light) */
+    --color-border:  oklch(0.88 0.01 255);          /* borders (light) */
+
+    /* one accent step is enough to start; expand later if needed */
+    --color-accent-600: oklch(0.62 0.20 270);       /* brand accent */
+    --radius-md: 0.75rem;                           /* example radius token */
+}
+
+/* 2) Set global defaults so portaled layers (Radix menus, dialogs) inherit. */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    color: var(--color-text);
+    background: var(--color-surface);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* 3) Dark overrides: swap token *values* at runtime.
+   You don’t redefine @theme here; you override the generated CSS vars. */
+:where(.dark, .dark *) {
+    --color-surface: oklch(0.15 0.02 255);
+    --color-text:    oklch(0.96 0.01 255);
+    --color-muted:   oklch(0.75 0.01 255);
+    --color-border:  oklch(0.28 0.02 255);
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+    /* keep accent or shift it slightly for dark contrast, your call */
+    --color-accent-600: oklch(0.70 0.20 270);
 }
