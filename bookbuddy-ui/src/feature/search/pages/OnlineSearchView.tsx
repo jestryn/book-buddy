@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Search, BookText } from 'lucide-react'
-import { ThemeToggle } from '../../../shared/components/ThemeToggle' // @/components/ThemeToggle or relative import
+import { Search } from 'lucide-react'
 import { ResultCard } from '../components/ResultCard'   // @/components/ResultCard or relative import
 import type { BookHit } from '../../../shared/types/book'           // @/types/book or relative import
-import { applyTheme, getTheme, setTheme } from '../../../theme' // @/theme or relative import
-
-type Theme = 'light' | 'dark' | 'auto'
+import {PageHeader} from "../../../shared/components/PageHeader.tsx"; // @/theme or relative import
 
 export default function OnlineSearchView() {
-    const [theme, setThemeSel] = useTheme()
     const [q, setQ] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -87,15 +83,7 @@ export default function OnlineSearchView() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">
-            <header className="sticky top-0 z-40 border-b border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur">
-                <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
-                    <BookText className="h-6 w-6" aria-hidden />
-                    <h1 className="text-lg font-semibold tracking-tight">BookBuddy • Online Search</h1>
-                    <div className="ml-auto">
-                        <ThemeToggle value={theme} onChange={setThemeSel} />
-                    </div>
-                </div>
-            </header>
+            <PageHeader title={"Online Search View"}></PageHeader>
 
             <main className="mx-auto max-w-6xl px-4 py-6">
                 <form onSubmit={onSubmit} className="flex items-stretch gap-2">
@@ -134,11 +122,4 @@ export default function OnlineSearchView() {
             </main>
         </div>
     )
-}
-
-/* -------- hooks -------- */
-function useTheme(): [Theme, (t: Theme) => void] {
-    const [theme, set] = useState<Theme>(getTheme())
-    useEffect(() => applyTheme(theme), [theme])
-    return [theme, (t) => { set(t); setTheme(t) }]
 }
