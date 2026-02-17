@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 import { ResultCard } from '../components/ResultCard'   // @/components/ResultCard or relative import
 import type { BookHit } from '../../../shared/types/book'           // @/types/book or relative import
-import {PageHeader} from "../../../shared/components/PageHeader.tsx"; // @/theme or relative import
 
 export default function OnlineSearchView() {
     const [q, setQ] = useState('')
@@ -82,44 +81,40 @@ export default function OnlineSearchView() {
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100">
-            <PageHeader title={"Online Search View"}></PageHeader>
+        <main className="mx-auto max-w-6xl px-4 py-6">
+            <form onSubmit={onSubmit} className="flex items-stretch gap-2">
+                <div className="relative flex-1">
+                    <input
+                        value={q}
+                        onChange={(e) => setQ(e.target.value)}
+                        placeholder="Search Google Books…"
+                        className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/50"
+                    />
+                    <Search className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
+                </div>
+                <button type="submit" className="rounded-xl px-4 py-3 font-medium bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-600/90">
+                    Search
+                </button>
+            </form>
 
-            <main className="mx-auto max-w-6xl px-4 py-6">
-                <form onSubmit={onSubmit} className="flex items-stretch gap-2">
-                    <div className="relative flex-1">
-                        <input
-                            value={q}
-                            onChange={(e) => setQ(e.target.value)}
-                            placeholder="Search Google Books…"
-                            className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-3 pr-10 outline-none focus:ring-2 focus:ring-indigo-500/50"
-                        />
-                        <Search className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
+            {loading && <p className="mt-6 text-sm text-zinc-500">Searching…</p>}
+            {error && <p className="mt-6 text-sm text-red-600 dark:text-red-400">{error}</p>}
+
+            <section className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                {!loading && !error && results.length === 0 && (
+                    <div className="col-span-full text-sm text-zinc-500">
+                        Try a query like “The Pragmatic Programmer”.
                     </div>
-                    <button type="submit" className="rounded-xl px-4 py-3 font-medium bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-600/90">
-                        Search
-                    </button>
-                </form>
-
-                {loading && <p className="mt-6 text-sm text-zinc-500">Searching…</p>}
-                {error && <p className="mt-6 text-sm text-red-600 dark:text-red-400">{error}</p>}
-
-                <section className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                    {!loading && !error && results.length === 0 && (
-                        <div className="col-span-full text-sm text-zinc-500">
-                            Try a query like “The Pragmatic Programmer”.
-                        </div>
-                    )}
-                    {results.map(hit => (
-                        <ResultCard
-                            key={hit.id}
-                            book={hit}
-                            saved={savedIds.has(hit.id)}
-                            onAdd={async () => { if (!savedIds.has(hit.id)) await saveToLibrary(hit) }}
-                        />
-                    ))}
-                </section>
-            </main>
-        </div>
+                )}
+                {results.map(hit => (
+                    <ResultCard
+                        key={hit.id}
+                        book={hit}
+                        saved={savedIds.has(hit.id)}
+                        onAdd={async () => { if (!savedIds.has(hit.id)) await saveToLibrary(hit) }}
+                    />
+                ))}
+            </section>
+        </main>
     )
 }
