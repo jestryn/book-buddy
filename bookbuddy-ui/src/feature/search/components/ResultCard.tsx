@@ -23,7 +23,7 @@ export function ResultCard({
                 <div className="min-w-0 flex-1">
                     {/* header row: title + actions */}
                     <div className="flex items-start gap-2">
-                        <h3 className="min-w-0 flex-1 font-semibold leading-tight">
+                        <h3 className="min-w-0 flex-1 font-semibold leading-tight truncate">
                             {book.title}
                         </h3>
 
