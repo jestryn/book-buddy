@@ -3,6 +3,12 @@ import { Search } from 'lucide-react'
 import { ResultCard } from '../components/ResultCard'   // @/components/ResultCard or relative import
 import type { BookHit } from '../../../shared/types/book'           // @/types/book or relative import
 
+function toArray(value: unknown): string[] {
+    if (Array.isArray(value)) return value.filter(Boolean).map(String)
+    if (typeof value === 'string' && value) return [value]
+    return []
+}
+
 export default function OnlineSearchView() {
     const [q, setQ] = useState('')
     const [loading, setLoading] = useState(false)
@@ -26,22 +32,50 @@ export default function OnlineSearchView() {
         if (!query) return
         setLoading(true); setError(null)
         try {
-            const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
-            const res = await fetch(url)
+            const res = await fetch(`/api/google_books/search?q=${encodeURIComponent(query)}`)
+            if (!res.ok) {
+                if (res.status === 429) {
+                    throw new Error('Google Books is rate limiting requests. Please try again in a minute.')
+                }
+                throw new Error('Search request failed')
+            }
             const data = await res.json()
             const items = Array.isArray(data.items) ? data.items : []
             setResults(items.map((it: any) => {
                 const info = it.volumeInfo || {}
+                const accessInfo = it.accessInfo || {}
+                const saleInfo = it.saleInfo || {}
+                const ids = Array.isArray(info.industryIdentifiers) ? info.industryIdentifiers : []
+                const isbn10 = ids.find((id: any) => id?.type === 'ISBN_10')?.identifier
+                const isbn13 = ids.find((id: any) => id?.type === 'ISBN_13')?.identifier
+                const formats = new Set<string>()
+                if (info.printType) formats.add(String(info.printType))
+                if (accessInfo?.epub?.isAvailable) formats.add('EPUB')
+                if (accessInfo?.pdf?.isAvailable) formats.add('PDF')
+                if (info?.readingModes?.text) formats.add('Text')
+                if (info?.readingModes?.image) formats.add('Image')
+                if (saleInfo?.isEbook) formats.add('eBook')
                 const img = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail
                 return {
                     id: it.id,
                     title: info.title || 'Untitled',
                     authors: Array.isArray(info.authors) ? info.authors.join(', ') : (info.authors || 'Unknown'),
                     thumbnail: img?.replace('http://', 'https://'),
+                    description: info.description,
+                    publisher: info.publisher,
+                    published_date: info.publishedDate,
+                    page_count: info.pageCount,
+                    isbn10,
+                    isbn13,
+                    language_codes: toArray(info.language).map((lang) => lang.toUpperCase()),
+                    categories: toArray(info.categories),
+                    formats: Array.from(formats),
+                    preview_link: info.previewLink,
                 } as BookHit
             }))
-        } catch {
-            setError('Something went wrong fetching results.')
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : 'Something went wrong fetching results.'
+            setError(msg)
         } finally {
             setLoading(false)
         }
@@ -58,6 +92,16 @@ export default function OnlineSearchView() {
             title: book.title,
             authors: book.authors,
             thumbnail: book.thumbnail,
+            description: book.description,
+            publisher: book.publisher,
+            published_date: book.published_date,
+            page_count: book.page_count,
+            isbn10: book.isbn10,
+            isbn13: book.isbn13,
+            language_codes: book.language_codes,
+            categories: book.categories,
+            formats: book.formats,
+            preview_link: book.preview_link,
         }
         try {
             const res = await fetch('/api/library', {
