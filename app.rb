@@ -9,20 +9,12 @@ require_relative './repositories/library_repository'
 
 set :port, 4567
 set :static, true
-set :public_folder, File.expand_path('public', __dir__)
+set :public_folder, File.expand_path('bookbuddy-ui/dist', __dir__)
 set :google_books_api_key, ENV['GOOGLE_BOOKS_API_KEY']
 
 repo = LibraryRepository.new('./data/library.yml')
 google_books_cache = {}
 google_books_cache_ttl_seconds = 60 * 30
-
-get '/' do
-  send_file File.join(settings.public_folder, 'index.html')
-end
-
-get '/search' do
-  send_file File.join(settings.public_folder, 'search.html')
-end
 
 get '/api/library' do
   library = repo.all
@@ -151,4 +143,15 @@ get '/api/google_books/volumes/:id' do
 
   status code
   response.body
+end
+
+get '/' do
+  send_file File.join(settings.public_folder, 'index.html')
+end
+
+# SPA fallback: non-API frontend routes should load React index.html
+get '/*' do
+  pass if request.path_info.start_with?('/api/')
+  pass if request.path_info.include?('.')
+  send_file File.join(settings.public_folder, 'index.html')
 end
