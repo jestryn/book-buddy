@@ -3,7 +3,7 @@ GEM
   specs:
     base64 (0.3.0)
     multi_json (1.15.0)
-    mustermann (3.0.3)
+    mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
     rack (2.2.17)
     rack-protection (3.2.0)
@@ -21,7 +21,7 @@ GEM
       rack-protection (= 3.2.0)
       sinatra (= 3.2.0)
       tilt (~> 2.0)
-    tilt (2.6.1)
+    tilt (2.7.0)
     yaml (0.4.0)
 
 PLATFORMS
