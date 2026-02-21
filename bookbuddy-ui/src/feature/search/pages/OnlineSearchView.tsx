@@ -3,6 +3,43 @@ import { Search } from 'lucide-react'
 import { ResultCard } from '../components/ResultCard'   // @/components/ResultCard or relative import
 import type { BookHit } from '../../../shared/types/book'           // @/types/book or relative import
 
+type GoogleBookIdentifier = {
+    type?: string
+    identifier?: string
+}
+
+type GoogleBookItem = {
+    id?: string
+    volumeInfo?: {
+        title?: string
+        authors?: string[] | string
+        imageLinks?: {
+            thumbnail?: string
+            smallThumbnail?: string
+        }
+        description?: string
+        publisher?: string
+        publishedDate?: string
+        pageCount?: number
+        language?: string | string[]
+        categories?: string | string[]
+        previewLink?: string
+        printType?: string
+        readingModes?: {
+            text?: boolean
+            image?: boolean
+        }
+        industryIdentifiers?: GoogleBookIdentifier[]
+    }
+    accessInfo?: {
+        epub?: { isAvailable?: boolean }
+        pdf?: { isAvailable?: boolean }
+    }
+    saleInfo?: {
+        isEbook?: boolean
+    }
+}
+
 function toArray(value: unknown): string[] {
     if (Array.isArray(value)) return value.filter(Boolean).map(String)
     if (typeof value === 'string' && value) return [value]
@@ -24,7 +61,9 @@ export default function OnlineSearchView() {
                     const ids: string[] = await res.json()
                     setSavedIds(new Set(ids))
                 }
-            } catch { /* non-blocking */ }
+            } catch (error) {
+                console.debug('Failed to load saved Google IDs:', error)
+            }
         })()
     }, [])
 
@@ -41,13 +80,13 @@ export default function OnlineSearchView() {
             }
             const data = await res.json()
             const items = Array.isArray(data.items) ? data.items : []
-            setResults(items.map((it: any) => {
+            setResults(items.map((it: GoogleBookItem) => {
                 const info = it.volumeInfo || {}
                 const accessInfo = it.accessInfo || {}
                 const saleInfo = it.saleInfo || {}
                 const ids = Array.isArray(info.industryIdentifiers) ? info.industryIdentifiers : []
-                const isbn10 = ids.find((id: any) => id?.type === 'ISBN_10')?.identifier
-                const isbn13 = ids.find((id: any) => id?.type === 'ISBN_13')?.identifier
+                const isbn10 = ids.find((id: GoogleBookIdentifier) => id?.type === 'ISBN_10')?.identifier
+                const isbn13 = ids.find((id: GoogleBookIdentifier) => id?.type === 'ISBN_13')?.identifier
                 const formats = new Set<string>()
                 if (info.printType) formats.add(String(info.printType))
                 if (accessInfo?.epub?.isAvailable) formats.add('EPUB')
@@ -111,7 +150,12 @@ export default function OnlineSearchView() {
             })
             if (!res.ok) {
                 let msg = 'Could not add to library'
-                try { const j = await res.json(); if (j?.error) msg = j.error } catch {}
+                try {
+                    const j = await res.json()
+                    if (j?.error) msg = j.error
+                } catch (error) {
+                    console.debug('Failed to parse library error response:', error)
+                }
                 throw new Error(msg)
             }
             await res.json()
