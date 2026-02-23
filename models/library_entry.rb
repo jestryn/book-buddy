@@ -3,11 +3,13 @@ require 'securerandom'
 
 class LibraryEntry
   attr_accessor :id, :google_id, :title, :authors, :thumbnail, :status, :notes, :added_date, :rating, :progress,
+                :started_reading_date, :finished_reading_date,
                 :description, :publisher, :published_date, :page_count, :isbn10, :isbn13, :language_codes, :categories,
                 :formats, :preview_link
 
   def initialize(id: nil, google_id: nil, title:, authors:, thumbnail: nil, status: 'unread', notes: "", added_date: nil,
-                 rating: nil, progress: 0, description: nil, publisher: nil, published_date: nil, page_count: nil,
+                 rating: nil, progress: 0, started_reading_date: nil, finished_reading_date: nil,
+                 description: nil, publisher: nil, published_date: nil, page_count: nil,
                  isbn10: nil, isbn13: nil, language_codes: [], categories: [], formats: [], preview_link: nil)
     @id = id
     @google_id = google_id
@@ -19,6 +21,8 @@ class LibraryEntry
     @added_date = added_date
     @rating = rating
     @progress = progress
+    @started_reading_date = started_reading_date
+    @finished_reading_date = finished_reading_date
     @description = description
     @publisher = publisher
     @published_date = published_date
@@ -43,6 +47,8 @@ class LibraryEntry
       added_date: added_date,
       rating: rating,
       progress: progress,
+      started_reading_date: started_reading_date,
+      finished_reading_date: finished_reading_date,
       description: description,
       publisher: publisher,
       published_date: published_date,

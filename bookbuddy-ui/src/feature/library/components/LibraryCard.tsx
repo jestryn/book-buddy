@@ -33,7 +33,12 @@ export function LibraryCard({
                         <h3 className="font-semibold leading-tight line-clamp-2">{book.title}</h3>
                         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 truncate">{book.authors}</p>
                         <div className="mt-2 flex items-center gap-2 flex-wrap">
-                            <span className="text-xs text-zinc-500">Added {book.added_date || 'recently'}</span>
+                            {book.started_reading_date ? (
+                                <span className="text-xs text-zinc-500">Started {book.started_reading_date}</span>
+                            ) : null}
+                            {book.finished_reading_date ? (
+                                <span className="text-xs text-zinc-500">Finished {book.finished_reading_date}</span>
+                            ) : null}
                             <span
                                 className={[
                                     'rounded-full px-2 py-0.5 text-[11px] font-medium capitalize',

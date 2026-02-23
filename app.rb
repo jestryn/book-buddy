@@ -44,6 +44,8 @@ post '/api/library' do
     rating: nil,
     progress: 0,
     added_date: Time.now.strftime('%Y-%m-%d'),
+    started_reading_date: nil,
+    finished_reading_date: nil,
     description: payload['description'],
     publisher: payload['publisher'],
     published_date: payload['published_date'],
@@ -63,6 +65,25 @@ end
 
 put '/api/library/:id' do
   payload = JSON.parse(request.body.read)
+  existing = repo.find(params[:id])
+  halt 404, json({ error: 'Book not found' }) unless existing
+
+  if payload.key?('status')
+    today = Time.now.strftime('%Y-%m-%d')
+
+    case payload['status']
+    when 'unread'
+      payload['started_reading_date'] = nil unless payload.key?('started_reading_date')
+      payload['finished_reading_date'] = nil unless payload.key?('finished_reading_date')
+    when 'reading'
+      payload['started_reading_date'] = existing.started_reading_date || today unless payload.key?('started_reading_date')
+      payload['finished_reading_date'] = nil unless payload.key?('finished_reading_date')
+    when 'completed'
+      payload['started_reading_date'] = existing.started_reading_date || today unless payload.key?('started_reading_date')
+      payload['finished_reading_date'] = existing.finished_reading_date || today unless payload.key?('finished_reading_date')
+    end
+  end
+
   updated = repo.update(params[:id], payload)
   halt 404, json({ error: 'Book not found' }) unless updated
   json updated.to_h

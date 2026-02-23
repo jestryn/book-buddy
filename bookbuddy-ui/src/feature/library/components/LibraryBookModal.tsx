@@ -121,6 +121,18 @@ export function LibraryBookModal({
                                 {book.added_date || 'Unknown'}
                             </p>
                         </div>
+                        <div className="text-sm text-zinc-500">
+                            Started Reading
+                            <p className="mt-1 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 flex items-center">
+                                {book.started_reading_date || 'Not started'}
+                            </p>
+                        </div>
+                        <div className="text-sm text-zinc-500">
+                            Finished Reading
+                            <p className="mt-1 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 flex items-center">
+                                {book.finished_reading_date || 'Not finished'}
+                            </p>
+                        </div>
                     </div>
 
                     <label className="text-sm text-zinc-500 block">
