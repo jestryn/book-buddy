@@ -28,6 +28,8 @@ export type LibraryBook = {
     rating: number | null
     progress: number
     added_date?: string
+    started_reading_date?: string
+    finished_reading_date?: string
     description?: string
     publisher?: string
     published_date?: string
