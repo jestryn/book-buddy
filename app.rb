@@ -16,6 +16,79 @@ repo = LibraryRepository.new('./data/library.yml')
 google_books_cache = {}
 google_books_cache_ttl_seconds = 60 * 30
 
+helpers do
+  def google_books_quota_exceeded?(status_code, body)
+    return true if status_code.to_i == 429
+    return false unless status_code.to_i == 403
+
+    parsed = JSON.parse(body.to_s)
+    reasons = (parsed.dig('error', 'errors') || []).map { |e| e['reason'].to_s.downcase }
+    message = parsed.dig('error', 'message').to_s.downcase
+
+    reasons.any? { |reason| reason.include?('quota') || reason.include?('ratelimit') || reason.include?('dailylimit') } ||
+      message.include?('quota')
+  rescue JSON::ParserError
+    false
+  end
+
+  def open_library_google_item(doc)
+    work_key = doc['key'].to_s
+    normalized_work_key = work_key.gsub(%r{[^A-Za-z0-9_-]}, '_')
+    item_id = "openlibrary:#{normalized_work_key.empty? ? SecureRandom.uuid : normalized_work_key}"
+    cover_id = doc['cover_i']
+    thumbnail = cover_id ? "https://covers.openlibrary.org/b/id/#{cover_id}-M.jpg" : nil
+    raw_isbns = doc['isbn'].is_a?(Array) ? doc['isbn'] : []
+    normalized_isbns = raw_isbns.map { |isbn| isbn.to_s.gsub(/[^0-9Xx]/, '').upcase }.uniq
+    isbn10 = normalized_isbns.find { |isbn| isbn.match?(/\A[0-9X]{10}\z/) }
+    isbn13 = normalized_isbns.find { |isbn| isbn.match?(/\A[0-9]{13}\z/) }
+    identifiers = []
+    identifiers << { 'type' => 'ISBN_10', 'identifier' => isbn10 } if isbn10
+    identifiers << { 'type' => 'ISBN_13', 'identifier' => isbn13 } if isbn13
+
+    {
+      'id' => item_id,
+      'volumeInfo' => {
+        'title' => doc['title'] || 'Untitled',
+        'authors' => (doc['author_name'].is_a?(Array) ? doc['author_name'] : []),
+        'imageLinks' => thumbnail ? { 'thumbnail' => thumbnail, 'smallThumbnail' => thumbnail } : {},
+        'description' => nil,
+        'publisher' => (doc['publisher'].is_a?(Array) ? doc['publisher'].first : doc['publisher']),
+        'publishedDate' => doc['first_publish_year']&.to_s,
+        'pageCount' => nil,
+        'industryIdentifiers' => identifiers,
+        'language' => (doc['language'].is_a?(Array) ? doc['language'].first(5) : []),
+        'categories' => (doc['subject'].is_a?(Array) ? doc['subject'].first(6) : []),
+        'previewLink' => work_key.empty? ? nil : "https://openlibrary.org#{work_key}",
+        'printType' => 'BOOK',
+        'readingModes' => { 'text' => true, 'image' => !thumbnail.nil? }
+      },
+      'accessInfo' => {
+        'epub' => { 'isAvailable' => false },
+        'pdf' => { 'isAvailable' => false }
+      },
+      'saleInfo' => { 'isEbook' => false }
+    }
+  end
+
+  def search_open_library(query)
+    uri = URI('https://openlibrary.org/search.json')
+    uri.query = URI.encode_www_form([['q', query], ['limit', '20']])
+    response = Net::HTTP.get_response(uri)
+    return nil unless response.code.to_i == 200
+
+    data = JSON.parse(response.body)
+    docs = data['docs'].is_a?(Array) ? data['docs'] : []
+    items = docs.map { |doc| open_library_google_item(doc) }
+    {
+      'kind' => 'books#volumes',
+      'totalItems' => items.length,
+      'items' => items
+    }
+  rescue JSON::ParserError, StandardError
+    nil
+  end
+end
+
 get '/api/library' do
   library = repo.all
   json library.map(&:to_h)
@@ -127,6 +200,15 @@ get '/api/google_books/search' do
   if code == 429 && cached
     headers 'X-BookBuddy-Cache' => 'stale'
     return cached[:body]
+  end
+
+  if google_books_quota_exceeded?(code, response.body)
+    fallback = search_open_library(query)
+    if fallback
+      headers 'X-BookBuddy-Provider' => 'openlibrary'
+      headers 'X-BookBuddy-Fallback' => 'google-books-quota-exceeded'
+      return fallback.to_json
+    end
   end
 
   status code
