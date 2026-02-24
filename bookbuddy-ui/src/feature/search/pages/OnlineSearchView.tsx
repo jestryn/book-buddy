@@ -3,6 +3,8 @@ import { Search } from 'lucide-react'
 import { ResultCard } from '../components/ResultCard'   // @/components/ResultCard or relative import
 import type { BookHit } from '../../../shared/types/book'           // @/types/book or relative import
 
+const SEARCH_PAGE_STATE_KEY = 'bookbuddy.search.page-state.v1'
+
 type GoogleBookIdentifier = {
     type?: string
     identifier?: string
@@ -40,10 +42,49 @@ type GoogleBookItem = {
     }
 }
 
+type PersistedSearchState = {
+    query: string
+    results: BookHit[]
+}
+
 function toArray(value: unknown): string[] {
     if (Array.isArray(value)) return value.filter(Boolean).map(String)
     if (typeof value === 'string' && value) return [value]
     return []
+}
+
+function readPersistedSearchState(): PersistedSearchState | null {
+    if (typeof window === 'undefined') return null
+    try {
+        const raw = window.sessionStorage.getItem(SEARCH_PAGE_STATE_KEY)
+        if (!raw) return null
+        const parsed = JSON.parse(raw) as Partial<PersistedSearchState>
+        if (typeof parsed.query !== 'string' || !Array.isArray(parsed.results)) return null
+        return {
+            query: parsed.query,
+            results: parsed.results as BookHit[],
+        }
+    } catch {
+        return null
+    }
+}
+
+function writePersistedSearchState(state: PersistedSearchState) {
+    if (typeof window === 'undefined') return
+    try {
+        window.sessionStorage.setItem(SEARCH_PAGE_STATE_KEY, JSON.stringify(state))
+    } catch (error) {
+        console.debug('Failed to persist search page state:', error)
+    }
+}
+
+function clearPersistedSearchState() {
+    if (typeof window === 'undefined') return
+    try {
+        window.sessionStorage.removeItem(SEARCH_PAGE_STATE_KEY)
+    } catch (error) {
+        console.debug('Failed to clear search page state:', error)
+    }
 }
 
 export default function OnlineSearchView() {
@@ -52,6 +93,13 @@ export default function OnlineSearchView() {
     const [error, setError] = useState<string | null>(null)
     const [results, setResults] = useState<BookHit[]>([])
     const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
+
+    useEffect(() => {
+        const persisted = readPersistedSearchState()
+        if (!persisted) return
+        setQ(persisted.query)
+        setResults(persisted.results)
+    }, [])
 
     useEffect(() => {
         ;(async () => {
@@ -80,7 +128,7 @@ export default function OnlineSearchView() {
             }
             const data = await res.json()
             const items = Array.isArray(data.items) ? data.items : []
-            setResults(items.map((it: GoogleBookItem) => {
+            const mappedResults = items.map((it: GoogleBookItem) => {
                 const info = it.volumeInfo || {}
                 const accessInfo = it.accessInfo || {}
                 const saleInfo = it.saleInfo || {}
@@ -111,7 +159,9 @@ export default function OnlineSearchView() {
                     formats: Array.from(formats),
                     preview_link: info.previewLink,
                 } as BookHit
-            }))
+            })
+            setResults(mappedResults)
+            writePersistedSearchState({ query, results: mappedResults })
         } catch (e) {
             const msg = e instanceof Error ? e.message : 'Something went wrong fetching results.'
             setError(msg)
@@ -122,7 +172,16 @@ export default function OnlineSearchView() {
 
     function onSubmit(e: React.FormEvent) {
         e.preventDefault()
-        searchBooks(q.trim())
+        const query = q.trim()
+        if (!query) {
+            setQ('')
+            setError(null)
+            setResults([])
+            clearPersistedSearchState()
+            return
+        }
+        setQ(query)
+        searchBooks(query)
     }
 
     async function saveToLibrary(book: BookHit) {
